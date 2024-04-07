@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3 uid="uid://dmcv2gc04jcv4"]
+
+[ext_resource type="Texture2D" uid="uid://3pmj3qh07l67" path="res://assets/ww2_tanks_top_export/Tiger/ww2_top_view_hull3.png" id="1_3l4a0"]
+[ext_resource type="Texture2D" uid="uid://3ycayyopsflo" path="res://assets/ww2_tanks_top_export/Tiger/ww2_top_view_turret3.png" id="2_3x57r"]
+[ext_resource type="Script" path="res://tank.gd" id="3_r85mj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vmr4s"]
+size = Vector2(14, 24)
+
+[node name="tiger" type="CharacterBody2D"]
+script = ExtResource("3_r85mj")
+
+[node name="body" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_3l4a0")
+
+[node name="turret" type="Sprite2D" parent="body"]
+texture = ExtResource("2_3x57r")
+
+[node name="indicator_line" type="Node2D" parent="body/turret"]
+z_index = 2
+
+[node name="Line2D" type="Line2D" parent="body/turret/indicator_line"]
+position = Vector2(0, -32)
+scale = Vector2(2, 2)
+points = PackedVector2Array(0, -25, 0, -19)
+width = 1.0
+default_color = Color(1, 1, 1, 0.85098)
+texture_mode = 1
+
+[node name="Line2D2" type="Line2D" parent="body/turret/indicator_line"]
+position = Vector2(0, -50.61)
+scale = Vector2(2, 2)
+points = PackedVector2Array(0, -24.545, 0, -19)
+width = 1.0
+default_color = Color(1, 1, 1, 0.85098)
+texture_mode = 1
+
+[node name="Line2D3" type="Line2D" parent="body/turret/indicator_line"]
+position = Vector2(0, -67.97)
+scale = Vector2(2, 2)
+points = PackedVector2Array(0, -24.955, 0, -19)
+width = 1.0
+default_color = Color(1, 1, 1, 0.85098)
+texture_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_vmr4s")
