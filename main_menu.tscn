@@ -1,6 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://7gx11c5aiu1f"]
+[gd_scene load_steps=5 format=3 uid="uid://7gx11c5aiu1f"]
 
 [ext_resource type="Script" path="res://main_menu.gd" id="1_mvvbg"]
+[ext_resource type="AudioStream" uid="uid://dx2jxepiws30n" path="res://assets/simple_battle_fanfare/simple_battle_fanfare.wav" id="2_e83hc"]
+[ext_resource type="Texture2D" uid="uid://5lm5k0uodj0u" path="res://assets/_ai_generated/Gemini_Generated_Image_encoshencoshenco.jpg" id="2_st604"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tiuoj"]
 bg_color = Color(0.00392157, 0.00392157, 0.00392157, 1)
@@ -15,11 +17,39 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mvvbg")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="background" type="TextureRect" parent="."]
 layout_mode = 2
-offset_right = 512.0
-offset_bottom = 546.0
-color = Color(0.0745098, 0, 0.0745098, 1)
+offset_right = 528.0
+offset_bottom = 519.0
+texture = ExtResource("2_st604")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 146.0
+offset_top = 174.0
+offset_right = 387.0
+offset_bottom = 349.0
+color = Color(0.286275, 0.172549, 0.172549, 0.607843)
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 44.0
+offset_right = 481.0
+offset_bottom = 123.0
+color = Color(0.286275, 0.172549, 0.172549, 0.607843)
+
+[node name="Label" type="Label" parent="ColorRect2"]
+layout_mode = 0
+offset_left = 37.0
+offset_top = -7.0
+offset_right = 147.0
+offset_bottom = 20.0
+scale = Vector2(3, 3)
+theme_override_font_sizes/font_size = 19
+text = "Tank Raider"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -51,6 +81,7 @@ layout_mode = 2
 text = "Create Room"
 
 [node name="lobby" type="Panel" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 147.0
 offset_top = 140.0
@@ -111,6 +142,10 @@ offset_right = 160.0
 offset_bottom = 242.0
 theme_override_colors/font_color = Color(1, 1, 0, 1)
 text = "Start Game"
+
+[node name="main_menu_music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_e83hc")
+autoplay = true
 
 [connection signal="pressed" from="VBoxContainer/join_button" to="." method="_on_join_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/create_room_button" to="." method="_on_create_room_button_pressed"]

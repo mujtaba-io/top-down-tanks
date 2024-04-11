@@ -70,6 +70,7 @@ func _on_join_blue_button_pressed():
 # reset multiplayer state to null
 func _on_close_lobby_button_pressed():
 	lobby.visible = false
+	lobby_players_list.clear()
 	global.remove_multiplayer_peer()
 
 

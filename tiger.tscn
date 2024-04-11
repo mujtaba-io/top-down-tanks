@@ -1,8 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://dmcv2gc04jcv4"]
+[gd_scene load_steps=10 format=3 uid="uid://dmcv2gc04jcv4"]
 
 [ext_resource type="Texture2D" uid="uid://3pmj3qh07l67" path="res://assets/ww2_tanks_top_export/Tiger/ww2_top_view_hull3.png" id="1_3l4a0"]
 [ext_resource type="Texture2D" uid="uid://3ycayyopsflo" path="res://assets/ww2_tanks_top_export/Tiger/ww2_top_view_turret3.png" id="2_3x57r"]
 [ext_resource type="Script" path="res://tank.gd" id="3_r85mj"]
+[ext_resource type="Texture2D" uid="uid://bgttqkwdcy4dx" path="res://assets/gui/bar_empty.png" id="4_2ixxq"]
+[ext_resource type="Texture2D" uid="uid://dhrp6p66jn407" path="res://assets/gui/arrow_right.png" id="4_4txav"]
+[ext_resource type="Texture2D" uid="uid://c0ih2tmjv7pri" path="res://assets/gui/bar_red.png" id="5_uv1b5"]
+[ext_resource type="AudioStream" uid="uid://cg2uh3rrvhe7t" path="res://assets/tank_sounds/canon_fire.ogg" id="7_8py0d"]
+[ext_resource type="AudioStream" uid="uid://bfyf6i7cvf3pm" path="res://assets/tank_sounds/engine_heavy_loop.ogg" id="8_nc1f1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vmr4s"]
 size = Vector2(14, 24)
@@ -18,6 +23,7 @@ texture = ExtResource("1_3l4a0")
 texture = ExtResource("2_3x57r")
 
 [node name="indicator_line" type="Node2D" parent="body/turret"]
+visible = false
 z_index = 2
 
 [node name="Line2D" type="Line2D" parent="body/turret/indicator_line"]
@@ -47,3 +53,43 @@ texture_mode = 1
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_vmr4s")
+
+[node name="info" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="team_color" type="TextureRect" parent="info"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = -12.0
+offset_right = 8.0
+offset_bottom = -6.0
+rotation = 1.5708
+texture = ExtResource("4_4txav")
+stretch_mode = 2
+
+[node name="health_bar" type="TextureProgressBar" parent="info"]
+layout_mode = 0
+offset_left = -10.0
+offset_top = -4.0
+offset_right = 42.0
+offset_bottom = 3.0
+scale = Vector2(0.4, 0.4)
+value = 100.0
+texture_under = ExtResource("4_2ixxq")
+texture_progress = ExtResource("5_uv1b5")
+texture_progress_offset = Vector2(1, 2)
+
+[node name="fire_sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_8py0d")
+max_distance = 512.0
+attenuation = 2.0
+
+[node name="engine_sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_nc1f1")
+volume_db = -3.0
+autoplay = true
+max_distance = 512.0
+attenuation = 2.0

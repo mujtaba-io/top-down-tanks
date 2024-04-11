@@ -2,8 +2,6 @@ extends Node2D
 
 var tank_scene = preload("res://tiger.tscn")
 
-var camera: Camera2D
-
 var world
 
 # Called when the node enters the scene tree for the first time.
@@ -14,13 +12,9 @@ func _ready():
 	instance_player.rpc()
 	global.player_loaded.rpc_id(1)
 	
-	camera = Camera2D.new()
-	camera.zoom = Vector2(1, 1)
-	camera.enabled = true
-	
+	# make human player control tank if it is same computer
 	var player = world.get_node(str(multiplayer.multiplayer_peer.get_unique_id()))
-	player.is_player_control = true
-	player.add_child(camera)
+	player.set_player_control()
 	
 	
 	#######3333333333333333333333333333
@@ -48,4 +42,5 @@ func instance_player():
 	tank.name = tank_name
 	tank.position = Vector2(randf_range(-20, 128), randf_range(-20, 128))
 	world.add_child(tank, true)
+	tank.add_to_group("tanks")
 	print("LOADEDDDDDDDDDDDDDDDDDDDDDD " + tank_name)

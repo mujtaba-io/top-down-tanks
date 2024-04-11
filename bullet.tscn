@@ -14,7 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://ddrchnau8i434" path="res://assets/explosion/10.png" id="12_41akr"]
 [ext_resource type="Texture2D" uid="uid://dxgc5ra4msurk" path="res://assets/explosion/11.png" id="13_u6hgi"]
 [ext_resource type="Texture2D" uid="uid://j2lsq4vls6ce" path="res://assets/explosion/12.png" id="14_qf5rc"]
-[ext_resource type="AudioStream" uid="uid://cce5n018dxnk3" path="res://assets/explosion.wav" id="15_0cbag"]
+[ext_resource type="AudioStream" uid="uid://2dl8g86kngy7" path="res://assets/tank_sounds/explodemini.wav" id="15_r1wg7"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wp7t4"]
 radius = 2.06155
@@ -64,6 +64,7 @@ animations = [{
 }]
 
 [node name="bullet" type="Area2D"]
+z_index = 2
 script = ExtResource("1_150we")
 
 [node name="sprite" type="Sprite2D" parent="."]
@@ -79,7 +80,9 @@ visible = false
 scale = Vector2(0.1, 0.1)
 sprite_frames = SubResource("SpriteFrames_auprc")
 
-[node name="audio_stream_player_2d" type="AudioStreamPlayer2D" parent="hit_anim"]
-stream = ExtResource("15_0cbag")
+[node name="explosion_sound" type="AudioStreamPlayer2D" parent="hit_anim"]
+stream = ExtResource("15_r1wg7")
+max_distance = 512.0
+attenuation = 2.0
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

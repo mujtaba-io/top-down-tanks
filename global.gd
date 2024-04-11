@@ -62,6 +62,7 @@ func create_game():
 
 
 func remove_multiplayer_peer():
+	players.erase(multiplayer.multiplayer_peer.get_unique_id())
 	multiplayer.multiplayer_peer = null
 
 
@@ -107,7 +108,7 @@ func _on_connected_ok():
 
 
 func _on_connected_fail():
-	multiplayer.multiplayer_peer = null
+	remove_multiplayer_peer()
 
 
 func _on_server_disconnected():
@@ -137,4 +138,4 @@ func _on_server_disconnected():
 
 @rpc("any_peer", "call_local", "reliable")
 func select_team(team_name: String):
-	global.players[multiplayer.multiplayer_peer.get_unique_id()]["team"] = team_name
+	global.players[multiplayer.get_remote_sender_id()]["team"] = team_name
