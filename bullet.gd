@@ -55,7 +55,10 @@ func _on_body_entered(body):
 func on_explode():
 	if exploded: return # hacky wy to solve bug that reduces health twice per explosion
 	for tank in get_tree().get_nodes_in_group("tanks"):
+		if tank.is_dead: continue # dont re-kill dead tanks
 		if tank == who_fired: continue
+		if tank.team == who_fired.team: continue
+		
 		var distance_to_tank: float = tank.global_position.distance_to(self.global_position)
 		if distance_to_tank < 12:
 			tank.reduce_health.emit(100)
@@ -68,7 +71,9 @@ func on_explode():
 		elif distance_to_tank < 128:
 			tank.reduce_health.emit(30)
 			#tank.on_reduce_health.rpc(30)
-			# shake camra
+		if tank.health <= 0:
+			who_fired.score += 1
+			who_fired.score_label.text = "Kills: " + str(who_fired.score)
 	exploded = true
 	$sprite.visible = false # hide bullet sprite (not whole self)
 	($hit_anim as AnimatedSprite2D).visible = true

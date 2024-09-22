@@ -93,3 +93,11 @@ volume_db = -3.0
 autoplay = true
 max_distance = 512.0
 attenuation = 2.0
+
+[node name="ui" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="score" type="Label" parent="ui"]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Kills: 0"

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="top-down-tanks"
-run/main_scene="res://main_menu.tscn"
+run/main_scene="res://Levels/Test.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -21,9 +21,8 @@ global="*res://global.gd"
 
 [display]
 
-window/size/viewport_width=512
-window/size/viewport_height=512
-window/stretch/mode="viewport"
+window/size/viewport_width=1024
+window/size/viewport_height=576
 
 [input]
 

@@ -1,0 +1,13 @@
+Player is a base calss for all kinds of players who control tanks.
+
+HumanPlayer extends Player - is responsible for input event handling
+and sending its data to the other peers. It is a local player for this
+PC.
+
+NetworkPlayer extends Player - is the player belonging to
+some HumanPlayer in another person's computer. it updates its state
+based on the data recieved from network (and not input events).
+
+
+AIPlayer (optional) - If we require making Tank AI, we can extend
+Player to add the functionality.

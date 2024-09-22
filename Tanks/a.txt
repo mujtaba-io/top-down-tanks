@@ -1,0 +1,9 @@
+
+Tank.gd is a base-class (Tank) for all the tanks in the sub-directories.
+
+All tanks scenes have the same Tank.gd script attached to them.
+
+Tank provides functions to control itself. These functions
+must be called by an external entity such as a Player.
+
+Tank itself does not call these functions.

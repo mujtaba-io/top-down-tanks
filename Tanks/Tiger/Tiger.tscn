@@ -1,0 +1,72 @@
+[gd_scene load_steps=8 format=3 uid="uid://k6g7e2p3vbur"]
+
+[ext_resource type="Script" path="res://Tanks/Tank.gd" id="1_hhu0u"]
+[ext_resource type="Texture2D" uid="uid://3pmj3qh07l67" path="res://assets/ww2_tanks_top_export/Tiger/ww2_top_view_hull3.png" id="2_gd201"]
+[ext_resource type="PackedScene" uid="uid://ojdp5ob5qkr3" path="res://Tanks/Bullet/Bullet.tscn" id="2_jwa78"]
+[ext_resource type="Texture2D" uid="uid://3ycayyopsflo" path="res://assets/ww2_tanks_top_export/Tiger/ww2_top_view_turret3.png" id="3_ntoav"]
+[ext_resource type="AudioStream" uid="uid://cg2uh3rrvhe7t" path="res://assets/tank_sounds/canon_fire.ogg" id="4_8kyep"]
+[ext_resource type="AudioStream" uid="uid://bfyf6i7cvf3pm" path="res://assets/tank_sounds/engine_heavy_loop.ogg" id="5_sqshc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aoi2v"]
+size = Vector2(14, 23)
+
+[node name="Tiger" type="CharacterBody2D" node_paths=PackedStringArray("turret", "bullet_spawn_point")]
+script = ExtResource("1_hhu0u")
+tank_name = "Tiger"
+country = 1
+turret = NodePath("Body/Turret")
+bullet_scene = ExtResource("2_jwa78")
+bullet_spawn_point = NodePath("Body/Turret/BulletSpawnPoint")
+
+[node name="Body" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_gd201")
+
+[node name="Turret" type="Sprite2D" parent="Body"]
+texture = ExtResource("3_ntoav")
+
+[node name="AimIndicator" type="Node2D" parent="Body/Turret"]
+z_index = 2
+
+[node name="Line2D" type="Line2D" parent="Body/Turret/AimIndicator"]
+position = Vector2(0, -32)
+scale = Vector2(2, 2)
+points = PackedVector2Array(0, -25, 0, -19)
+width = 1.0
+default_color = Color(1, 1, 1, 0.85098)
+texture_mode = 1
+
+[node name="Line2D2" type="Line2D" parent="Body/Turret/AimIndicator"]
+position = Vector2(0, -50.61)
+scale = Vector2(2, 2)
+points = PackedVector2Array(0, -24.545, 0, -19)
+width = 1.0
+default_color = Color(1, 1, 1, 0.85098)
+texture_mode = 1
+
+[node name="Line2D3" type="Line2D" parent="Body/Turret/AimIndicator"]
+position = Vector2(0, -67.97)
+scale = Vector2(2, 2)
+points = PackedVector2Array(0, -24.955, 0, -19)
+width = 1.0
+default_color = Color(1, 1, 1, 0.85098)
+texture_mode = 1
+
+[node name="BulletSpawnPoint" type="Marker2D" parent="Body/Turret"]
+position = Vector2(0, -35)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 2.5)
+shape = SubResource("RectangleShape2D_aoi2v")
+
+[node name="FireSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_8kyep")
+max_distance = 512.0
+attenuation = 2.0
+
+[node name="EngineSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_sqshc")
+volume_db = -3.0
+autoplay = true
+max_distance = 512.0
+attenuation = 2.0

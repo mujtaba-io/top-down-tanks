@@ -17,22 +17,35 @@ var camera: Camera2D
 var is_player_control: bool = false
 
 
+var team: String
+
 var player_info: Control
 var team_color: TextureRect
 var health_bar: TextureProgressBar
+
+var is_dead = false
+var death_timer: float = 3
+
+var score: int = 0
+var score_label: Label
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	world = get_tree().root.get_node("world")
 	turret = $body/turret
 	
+	team = global.players[multiplayer.get_remote_sender_id()]["team"]
+	
 	player_info = $info
 	team_color = $info/team_color
 	health_bar = $info/health_bar
-	(team_color as TextureRect).modulate = Color.RED if global.players[multiplayer.get_remote_sender_id()]["team"] == "red" else Color.BLUE
+	(team_color as TextureRect).modulate = Color.RED if team == "red" else Color.BLUE
 	health_bar.value = health # players[id]["health"]???
 	
 	reduce_health.connect(on_reduce_health)
+	
+	score = 0
+	score_label = $ui/score
 
 # Make player control the player
 func set_player_control():
@@ -42,6 +55,8 @@ func set_player_control():
 	camera.enabled = true
 	add_child(camera)
 	$body/turret/indicator_line.visible = true
+	
+	$ui.visible = true
 
 # both rpc and a signal callback
 @rpc("any_peer", "call_local", "unreliable")
@@ -49,12 +64,17 @@ func on_reduce_health(amount: int):
 	self.health -= amount
 	health_bar.value = self.health
 	world.get_node("ui").get_node("log").text += "\n"+str(multiplayer.get_unique_id())+" health reduced"
-	if health <= 0:
+	if self.health <= 0:
+		died.rpc()
 		print("died")
-		
-		queue_free() # TODO: propagate death to all players
-		# currently anyone can see we died, but they are not getting message
-		# just local view of death
+
+@rpc("any_peer", "call_local", "unreliable")
+func died():
+	var who = world.get_node(str(multiplayer.get_remote_sender_id()))
+	if who.health <= 0:
+		who.visible = false
+		who.is_dead = true
+		who.is_player_control = false
 
 ############
 var shake_timer=0.1
@@ -104,8 +124,27 @@ func _physics_process(delta):
 	
 	# keep healthbar, and team icon irrespective of tank rotation
 	player_info.rotation = -self.global_rotation
-	player_info.global_position = round(self.global_position / 2) * 2
+	player_info.global_position = self.global_position
+	
+	if is_dead:
+		visible = false
+		if death_timer < 0:
+			death_timer = 3
+			respawn.rpc()
+			is_dead = false
+		else:
+			death_timer -= delta
 
+@rpc("any_peer", "call_local", "reliable")
+func respawn():
+	var who = world.get_node(str(multiplayer.get_remote_sender_id()))
+	if who.health <= 0:
+		who.is_dead = false
+		who.visible = true
+		who.health = 100
+		who.health_bar.value = who.health
+		if multiplayer.get_remote_sender_id() == multiplayer.get_unique_id():
+			who.is_player_control = true
 
 @rpc("any_peer", "call_remote", "reliable")
 func update_pos_rot(new_position, new_rotation, turret_rotation):
