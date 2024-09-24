@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=3 uid="uid://bewsyi5wi2vof"]
+
+[ext_resource type="Script" path="res://MainMenu/MainMenu.gd" id="1_w852q"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_w852q")
+
+[node name="CreateServer" type="Button" parent="."]
+layout_mode = 0
+offset_left = 251.0
+offset_top = 101.0
+offset_right = 364.0
+offset_bottom = 132.0
+text = "Create Server"
+
+[node name="CreateClient" type="Button" parent="."]
+layout_mode = 0
+offset_left = 259.0
+offset_top = 184.0
+offset_right = 372.0
+offset_bottom = 215.0
+text = "Create Client"
+
+[connection signal="pressed" from="CreateServer" to="." method="_on_create_server_pressed"]
+[connection signal="pressed" from="CreateClient" to="." method="_on_create_client_pressed"]

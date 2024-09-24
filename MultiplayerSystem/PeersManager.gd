@@ -36,37 +36,99 @@ func _ready():
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
 
+# Return null on success
+func create_server():
+	var peer = ENetMultiplayerPeer.new()
+	var error = peer.create_server(PORT, MAX_CONNECTIONS)
+	if error:
+		return error
+	multiplayer.multiplayer_peer = peer
+	peers.append(1) # Add server's peer_id by default which is 1
+	return null
 
+
+# Return null on success
+func join_server(address = ""):
+	if address.is_empty():
+		address = DEFAULT_SERVER_IP
+	var peer = ENetMultiplayerPeer.new()
+	var error = peer.create_client(address, PORT)
+	peer.get_peer(1).set_timeout(0, 0, 5000)  # 5 seconds max timeout
+	if error:
+		return error
+	multiplayer.multiplayer_peer = peer
+	return null
+
+
+## RELATED TO EXTERNAL INCOMING CONNECTIONS:
+
+
+# If any peer (both server & client) connected. What should we do?
 func _on_peer_connected(id: int):
 	if not peers.has(id):
 		peers.append(id)
+	
+	# if we are server, then broadcast new peer to all existing peers
+	if multiplayer.is_server():
+		broadcast_peer.rpc(id, true)
+	
+	print("peer_connected")
 
 
 
+# If any peer (both server & client) disconnected. What should we do?
 func _on_peer_disconnected(id: int):
 	if peers.has(id):
 		peers.erase(id)
+	
+	# if we are server, then remove this peer from all existing peers
+	if multiplayer.is_server():
+		broadcast_peer.rpc(id, false)
 
 
+## RELATED TO OUR OWN STATE WITH THE SERVER (WE ARE CLIENT):
 
+
+# If WE are connected to server. What should we do?
 func _on_connected_to_server():
-	var local_peer_id = multiplayer.get_unique_id()
-	if not peers.has(local_peer_id):
-		peers.append(local_peer_id)
-	# todo: broadcast TO ALL OTHER PLAYERS
+	#var local_peer_id = multiplayer.get_unique_id()
+	#if not peers.has(local_peer_id):
+	#	peers.append(local_peer_id)
+	print('i am connected to server')
+	print(peers)
 
 
 
+# If OUR connection to server fail. What should we do?
 func _on_server_connection_failed():
-	var local_peer_id = multiplayer.get_unique_id()
-	if peers.has(local_peer_id):
-		peers.erase(local_peer_id)
+	#var local_peer_id = multiplayer.get_unique_id()
+	#if peers.has(local_peer_id):
+	#	peers.erase(local_peer_id)
+	peers.clear()
 	multiplayer.multiplayer_peer = null
 
 
 
+# If WE disconnect from server. What should we do?
 func _on_server_disconnected():
 	peers.clear()
 	multiplayer.multiplayer_peer = null
 
 
+
+##
+##
+##
+
+
+
+# is_adding=true means add to peers, false means remove from peers
+@rpc
+func broadcast_peer(peer_id: int, is_adding: bool):
+	if is_adding:
+		if not peers.has(peer_id):
+			peers.append(peer_id)
+	else:
+		if peers.has(peer_id):
+			peers.erase(peer_id)
+	print("rpc: broadcast_peer")
