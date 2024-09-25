@@ -1,0 +1,29 @@
+
+PeersManager will be Autoload global script.
+
+
+In this multiplayer architecture, we have a game instance
+which can create a server. Therre will be multiple client
+instances that can connect to it.
+
+It will for a cluster of connected devices following
+client-server architecture. Thus all P2P communication
+will pass through server (all RPC calls).
+
+Server will constantly listen to new clients,
+and add all the joined clients' RPC IDs to `peers` array
+and remove all disconnected clients from it.
+
+Server will also trigger its own signals that can be
+conected by any other script to do their task, so
+UI will listen to these signals to update their state,
+if player joined in-game, Level scene will use this 
+to spawn in level and so on.
+
+
+A server, with some clients connected will be called `cluster`.
+And a cluster only has 1 server and any number of clients.
+
+So:
+	MultiplayerSystem: Set of Peers
+	Peer: A game instance.

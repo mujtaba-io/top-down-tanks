@@ -16,13 +16,15 @@ const MAX_CONNECTIONS = 16
 
 # Tho, other scenes will also not directly call rpc,
 # but outsource them to base NetworkNode.
-var peers: Array[int] # Array of peer IDs
+var peers: Array # Array[int] - Array of peer IDs
 
 
 
 # API signals:
-signal player_connected
-signal player_disconnected # ???
+# Whenever a peer joins or leaves, we get a signal emit, so we can
+# update state based on peers array
+signal peers_updated
+
 
 
 func _ready():
@@ -70,7 +72,7 @@ func _on_peer_connected(id: int):
 	
 	# if we are server, then broadcast new peer to all existing peers
 	if multiplayer.is_server():
-		broadcast_peer.rpc(id, true)
+		broadcast_peers.rpc(peers)
 	
 	print("peer_connected")
 
@@ -83,7 +85,7 @@ func _on_peer_disconnected(id: int):
 	
 	# if we are server, then remove this peer from all existing peers
 	if multiplayer.is_server():
-		broadcast_peer.rpc(id, false)
+		broadcast_peers.rpc(peers)
 
 
 ## RELATED TO OUR OWN STATE WITH THE SERVER (WE ARE CLIENT):
@@ -95,7 +97,6 @@ func _on_connected_to_server():
 	#if not peers.has(local_peer_id):
 	#	peers.append(local_peer_id)
 	print('i am connected to server')
-	print(peers)
 
 
 
@@ -123,12 +124,7 @@ func _on_server_disconnected():
 
 
 # is_adding=true means add to peers, false means remove from peers
-@rpc
-func broadcast_peer(peer_id: int, is_adding: bool):
-	if is_adding:
-		if not peers.has(peer_id):
-			peers.append(peer_id)
-	else:
-		if peers.has(peer_id):
-			peers.erase(peer_id)
-	print("rpc: broadcast_peer")
+@rpc("call_local")
+func broadcast_peers(updated_peers: Array): # Array[int] causes bug in Godot
+	peers = updated_peers
+	peers_updated.emit()
