@@ -1,7 +1,7 @@
 extends Node2D
 class_name Player
 
-
+@export var player_peer_id: int # RPC ID associated
 @export var player_name: String
 @export var tank: Tank
 

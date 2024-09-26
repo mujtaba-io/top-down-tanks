@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bewsyi5wi2vof"]
+[gd_scene load_steps=4 format=3 uid="uid://bewsyi5wi2vof"]
 
 [ext_resource type="Script" path="res://MainMenu/MainMenu.gd" id="1_w852q"]
+[ext_resource type="Texture2D" uid="uid://5lm5k0uodj0u" path="res://assets/_ai_generated/Gemini_Generated_Image_encoshencoshenco.jpg" id="2_fbu3u"]
+[ext_resource type="AudioStream" uid="uid://dx2jxepiws30n" path="res://assets/simple_battle_fanfare/simple_battle_fanfare.wav" id="3_uriwe"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -11,21 +13,76 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_w852q")
 
-[node name="CreateServer" type="Button" parent="."]
-layout_mode = 0
-offset_left = 251.0
-offset_top = 101.0
-offset_right = 364.0
-offset_bottom = 132.0
-text = "Create Server"
+[node name="background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_fbu3u")
+expand_mode = 5
+stretch_mode = 4
+flip_h = true
 
-[node name="CreateClient" type="Button" parent="."]
-layout_mode = 0
-offset_left = 259.0
-offset_top = 184.0
-offset_right = 372.0
-offset_bottom = 215.0
-text = "Create Client"
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.286275, 0.172549, 0.172549, 0.607843)
 
-[connection signal="pressed" from="CreateServer" to="." method="_on_create_server_pressed"]
-[connection signal="pressed" from="CreateClient" to="." method="_on_create_client_pressed"]
+[node name="ColorRect2" type="ColorRect" parent="."]
+offset_left = 305.0
+offset_top = 110.0
+offset_right = 730.0
+offset_bottom = 189.0
+color = Color(0.176471, 0.227451, 0.137255, 0.607843)
+
+[node name="Label" type="Label" parent="ColorRect2"]
+layout_mode = 0
+offset_left = 37.0
+offset_top = -7.0
+offset_right = 147.0
+offset_bottom = 20.0
+scale = Vector2(3, 3)
+theme_override_font_sizes/font_size = 19
+text = "Tank Raider"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -95.0
+offset_right = 113.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="IPInput" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+placeholder_text = "LAN IP Address"
+
+[node name="CreateClient" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Join Room"
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "- INSTEAD -"
+horizontal_alignment = 1
+
+[node name="CreateServer" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Create Room"
+
+[node name="main_menu_music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_uriwe")
+autoplay = true
+
+[connection signal="pressed" from="VBoxContainer/CreateClient" to="." method="_on_create_client_pressed"]
+[connection signal="pressed" from="VBoxContainer/CreateServer" to="." method="_on_create_server_pressed"]

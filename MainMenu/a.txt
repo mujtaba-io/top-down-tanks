@@ -1,0 +1,8 @@
+Main menu just connects machines to form clusters.
+
+Lobby allows actual sending of data among players so
+they can get synchronized.
+
+Lobby also allows selecting tanks, changing player names and so on.
+And also broadcast this data to all other players via RPC calls.
+
