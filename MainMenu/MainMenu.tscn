@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bewsyi5wi2vof"]
+[gd_scene load_steps=5 format=3 uid="uid://bewsyi5wi2vof"]
 
 [ext_resource type="Script" path="res://MainMenu/MainMenu.gd" id="1_w852q"]
 [ext_resource type="Texture2D" uid="uid://5lm5k0uodj0u" path="res://assets/_ai_generated/Gemini_Generated_Image_encoshencoshenco.jpg" id="2_fbu3u"]
+[ext_resource type="PackedScene" uid="uid://tvg550um84g6" path="res://MainMenu/Lobby.tscn" id="2_snki6"]
 [ext_resource type="AudioStream" uid="uid://dx2jxepiws30n" path="res://assets/simple_battle_fanfare/simple_battle_fanfare.wav" id="3_uriwe"]
 
 [node name="MainMenu" type="Control"]
@@ -12,6 +13,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_w852q")
+lobby_scene = ExtResource("2_snki6")
 
 [node name="background" type="TextureRect" parent="."]
 layout_mode = 1
@@ -35,6 +37,7 @@ grow_vertical = 2
 color = Color(0.286275, 0.172549, 0.172549, 0.607843)
 
 [node name="ColorRect2" type="ColorRect" parent="."]
+layout_mode = 0
 offset_left = 305.0
 offset_top = 110.0
 offset_right = 730.0

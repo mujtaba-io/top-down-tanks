@@ -1,6 +1,8 @@
 extends Control
 
 
+@export var lobby_scene: PackedScene
+
 @onready var ip_input = $VBoxContainer/IPInput
 
 
@@ -9,14 +11,14 @@ func _ready():
 
 func _on_create_server_pressed():
 	PeersManager.create_server()
-	get_tree().change_scene_to_file("res://Levels/Test.tscn")
+	get_tree().change_scene_to_packed(lobby_scene)
 	# TODO: Open lobby scene actually
 
 
 
 func _on_create_client_pressed():
 	PeersManager.join_server()
-	# TODO: Open lobby scene actually
+	get_tree().change_scene_to_packed(lobby_scene)
 
 
 

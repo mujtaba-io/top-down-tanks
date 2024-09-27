@@ -9,7 +9,8 @@ class_name Player
 
 
 func _ready():
-	pass # Replace with function body.
+	if tank not in get_children():
+		add_child(tank)
 
 func _physics_process(delta):
 	pass

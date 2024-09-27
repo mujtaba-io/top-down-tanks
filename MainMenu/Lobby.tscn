@@ -1,6 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://tvg550um84g6"]
+[gd_scene load_steps=6 format=3 uid="uid://tvg550um84g6"]
 
 [ext_resource type="Script" path="res://MainMenu/Lobby.gd" id="1_cf06l"]
+[ext_resource type="PackedScene" uid="uid://b8yxd3g2wvn10" path="res://Players/HumanPlayer/HumanPlayer.tscn" id="2_i3dwp"]
+[ext_resource type="PackedScene" uid="uid://jvmf8bw2eyvm" path="res://Players/Player.tscn" id="3_wijn4"]
+[ext_resource type="PackedScene" uid="uid://k6g7e2p3vbur" path="res://Tanks/Tiger/Tiger.tscn" id="4_62gid"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f2dhy"]
+bg_color = Color(0.00392157, 0.00392157, 0.00392157, 1)
+corner_detail = 1
 
 [node name="Lobby" type="Control"]
 layout_mode = 3
@@ -10,3 +17,79 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_cf06l")
+human_player_scene = ExtResource("2_i3dwp")
+player_scene = ExtResource("3_wijn4")
+tank_scenes = Array[PackedScene]([ExtResource("4_62gid")])
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_f2dhy")
+
+[node name="CenterContainer" type="CenterContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/CenterContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Lobby"
+horizontal_alignment = 1
+
+[node name="PlayerList" type="ItemList" parent="Panel/CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(64, 116)
+layout_mode = 2
+max_text_lines = 3
+
+[node name="Label2" type="Label" parent="Panel/CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Join Team"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/CenterContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="JoinRedButton" type="Button" parent="Panel/CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+disabled = true
+text = "Join Red"
+
+[node name="JoinBlueButton" type="Button" parent="Panel/CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.0784314, 0.313726, 1, 1)
+disabled = true
+text = "Join Blue"
+
+[node name="StartGameButton" type="Button" parent="Panel/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+text = "Start Game"
+
+[node name="LeaveButton" type="Button" parent="Panel"]
+modulate = Color(1, 1, 0.207843, 1)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -31.0
+offset_bottom = 31.0
+grow_horizontal = 0
+text = "LEAVE"
+flat = true
+
+[connection signal="pressed" from="Panel/CenterContainer/VBoxContainer/StartGameButton" to="." method="_on_start_game_button_pressed"]
+[connection signal="pressed" from="Panel/LeaveButton" to="." method="_on_leave_button_pressed"]

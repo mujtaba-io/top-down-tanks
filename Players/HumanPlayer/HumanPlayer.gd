@@ -8,6 +8,7 @@ class_name HumanPlayer
 func _ready():
 	super()
 	camera.reparent(tank) # So camera moves with tank
+	camera.make_current()
 
 
 func _physics_process(delta):
