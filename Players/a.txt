@@ -11,3 +11,19 @@ based on the data recieved from network (and not input events).
 
 AIPlayer (optional) - If we require making Tank AI, we can extend
 Player to add the functionality.
+
+
+
+
+----
+
+
+
+> MUST NAME YOUR Player NODES AFTER THEIR PEER IDs.
+EDIT: Make sure to name all the network-enabled nodes such as
+Player to be their exact multiplayer peer IDs, because RPC
+calls look for nodes with same Nodepath on remote device.
+
+So if the nodes are named corectly, the RPC call will go to 
+correct node, else it will be received by another node of same
+type, thus causing stutter or glitchy movement or no movement at all.

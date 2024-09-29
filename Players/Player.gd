@@ -32,8 +32,6 @@ func _physics_process(delta):
 func broadcast_player_state(
 	tank_pos, tank_rot, turret_rot
 ):
-	if multiplayer.get_remote_sender_id() == player_peer_id:
-		tank.global_position = tank_pos
-		tank.global_rotation = tank_rot
-		tank.turret.global_rotation = turret_rot
-	
+	tank.global_position = tank_pos
+	tank.global_rotation = tank_rot
+	tank.turret.global_rotation = turret_rot

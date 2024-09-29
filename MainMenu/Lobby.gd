@@ -16,6 +16,7 @@ var players: Array
 func _ready():
 	
 	this_player = human_player_scene.instantiate()
+	this_player.name = str(multiplayer.get_unique_id()) # Node name
 	this_player.player_peer_id = multiplayer.get_unique_id()
 	this_player.player_name = "Player Name"
 	this_player.tank = tank_scenes[0].instantiate() # TODO: add tank dependencies
@@ -99,6 +100,7 @@ func broadcast_player(
 			break
 	if player == null:
 		player = player_scene.instantiate()
+		player.name = str(player_id) # Node name
 		player.player_peer_id = player_id
 		player.player_name = player_name
 		player.tank = tank_scenes[0].instantiate() # TODO: add tank dependencies
