@@ -8,9 +8,16 @@ class_name Player
 @export var kills: int
 
 
+signal death
+var is_dead = false
+
+
 func _ready():
+	add_to_group("players")
 	if tank not in get_children():
 		add_child(tank)
+	
+	death.connect(_on_death)
 
 
 func _process(delta):
@@ -21,17 +28,12 @@ func _physics_process(delta):
 
 
 
-
-#>
-#>
-#>
-
-
-
-@rpc("any_peer", "call_remote")
-func broadcast_player_state(
-	tank_pos, tank_rot, turret_rot
-):
-	tank.global_position = tank_pos
-	tank.global_rotation = tank_rot
-	tank.turret.global_rotation = turret_rot
+func _on_death():
+	if not is_dead:
+		is_dead = true
+		# Set death anim timer
+		# Schedule re-spawn (reset of variables) after animation played
+		# For now, just reset variables and respawn:
+		# TODO NEEDS THINKING THO
+	else:
+		print("Error: Death signal called on already dead tank.")

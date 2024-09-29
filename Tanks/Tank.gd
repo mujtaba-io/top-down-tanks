@@ -65,6 +65,7 @@ func look_turret_to(_global_position: Vector2): # or position?
 
 
 # Fire in turret's direction
+@rpc("any_peer", "call_local")
 func fire():
 	var bullet = bullet_scene.instantiate().with_data(
 		bullet_spawn_point.global_position,
@@ -79,7 +80,28 @@ func fire():
 	$FireSound.play()
 
 
-func _on_bullet_explode(_global_position: Vector2):
-	if self.position.distance_to(_global_position) < 32:
-		self.health -= 10
-		print(self.health)
+func _on_bullet_explode(at_global_position: Vector2):
+	pass # Bullet itself handles this
+
+
+
+
+
+
+
+
+
+
+#>
+#>
+#>
+
+
+
+@rpc("any_peer", "call_remote")
+func broadcast_state(
+	tank_pos, tank_rot, turret_rot
+):
+	global_position = tank_pos
+	global_rotation = tank_rot
+	turret.global_rotation = turret_rot

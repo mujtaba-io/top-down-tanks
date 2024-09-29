@@ -7,6 +7,7 @@ class_name HumanPlayer
 
 func _ready():
 	super()
+	add_to_group("human_players")
 	camera.reparent(tank) # So camera moves with tank
 	camera.make_current()
 
@@ -24,7 +25,7 @@ func _physics_process(delta):
 		tank.rotate_left(delta)
 	
 	if Input.is_action_just_pressed("mouse_left_click"):
-		tank.fire()
+		tank.fire.rpc() # Fire broadcast on all peers
 	
 	tank.look_turret_to(tank.get_global_mouse_position())
 
@@ -32,7 +33,7 @@ func _physics_process(delta):
 
 func _process(delta):
 	super(delta)
-	broadcast_player_state.rpc(
+	tank.broadcast_state.rpc( # Update tank state on all peers
 		tank.global_position,
 		tank.global_rotation,
 		tank.turret.global_rotation
