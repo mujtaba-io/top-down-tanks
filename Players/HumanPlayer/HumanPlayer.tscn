@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Players/HumanPlayer/HumanPlayer.gd" id="1_q6ctv"]
 
-[node name="HumanPlayer" type="Node2D" node_paths=PackedStringArray("camera")]
+[node name="HumanPlayer" type="Node" node_paths=PackedStringArray("camera")]
 script = ExtResource("1_q6ctv")
 camera = NodePath("Camera2D")
 

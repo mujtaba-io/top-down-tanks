@@ -23,5 +23,5 @@ func _on_create_client_pressed():
 
 
 func _on_peers_manager_peers_update():
-	print(PeersManager.peers)
+	pass
 

@@ -23,34 +23,26 @@ func _ready():
 	players.append(this_player)
 	
 	PeersManager.peers_updated.connect(_on_peers_manager_peers_updated)
+	
 	if not multiplayer.is_server():
 		$Panel/CenterContainer/VBoxContainer/StartGameButton.disabled = true
-
+	
+	# Broadcast overselve after connecting
+	broadcast_player.rpc(
+		this_player.player_peer_id,
+		this_player.player_name,
+		this_player.tank.scene_file_path
+	)
 
 
 
 func _process(delta):
 	# Synchronize connected players with the ItemList
+	# CLear al the items
+	player_list.clear()
+	# Add all the players
 	for player in players:
-		var playerFound = false
-		for i in range(player_list.item_count):
-			if player_list.get_item_text(i).contains(player.player_name):
-				playerFound = true
-				break
-		if not playerFound:
-			player_list.add_item(player.player_name)
-	
-	# Remove disconnected players from the ItemList
-	for i in range(player_list.item_count):
-		var playerName = player_list.get_item_text(i)
-		var playerExists = false
-		for player in players:
-			if playerName.contains(player.player_name):
-				playerExists = true
-				break
-		if not playerExists:
-			player_list.remove_item(i)
-			i -= 1
+		player_list.add_item(player.player_name + " (" + str(player.player_peer_id) + ")")
 
 
 
@@ -67,13 +59,24 @@ func _on_start_game_button_pressed():
 
 
 func _on_peers_manager_peers_updated():
-	for peer_id in PeersManager.peers:
-		broadcast_player.rpc_id(
-			peer_id,
-			this_player.player_peer_id,
-			this_player.player_name,
-			this_player.tank.scene_file_path
-		)
+	# Remove disconnected players
+	for player in players:
+		var playerFound = false
+		for peer_id in PeersManager.peers:
+			if player.player_peer_id == peer_id:
+				playerFound = true
+				break
+		if not playerFound:
+			players.erase(player)
+			player.tank.queue_free()
+			player.queue_free()
+	
+	# And broadcast ourself so we get added to other machines
+	broadcast_player.rpc(
+		this_player.player_peer_id,
+		this_player.player_name,
+		this_player.tank.scene_file_path
+	)
 
 
 #>

@@ -26,4 +26,15 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("mouse_left_click"):
 		tank.fire()
 	
-	tank.look_turret_to(get_global_mouse_position())
+	tank.look_turret_to(tank.get_global_mouse_position())
+
+
+
+func _process(delta):
+	super(delta)
+	broadcast_player_state.rpc(
+		tank.global_position,
+		tank.global_rotation,
+		tank.turret.global_rotation
+	)
+

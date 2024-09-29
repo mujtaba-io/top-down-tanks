@@ -17,14 +17,13 @@ func _ready():
 	self.add_child(this_player)
 	
 	for player in players:
-		if player.player_peer_id == multiplayer.get_unique_id():
-			continue # As it is `this_player` so handled separately
+		if player == this_player:
+			continue
 		self.add_child(player)
 	
 	# Randomize positions
 	for player in players:
-		player.position = Vector2(randf_range(0, 100), randf_range(0, 100))
-
+		player.tank.position = Vector2(1, 1) * randf_range(0, 100)
 
 
 

@@ -36,7 +36,8 @@ func _ready():
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
 	multiplayer.connection_failed.connect(_on_server_connection_failed)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
-
+	
+	peers_updated.connect(_on_peers_updated)
 
 # Return null on success
 func create_server():
@@ -55,7 +56,7 @@ func join_server(address = ""):
 		address = DEFAULT_SERVER_IP
 	var peer = ENetMultiplayerPeer.new()
 	var error = peer.create_client(address, PORT)
-	peer.get_peer(1).set_timeout(0, 0, 5000)  # 5 seconds max timeout
+	# peer.get_peer(1).set_timeout(0, 0, 5000)  # 5 seconds max timeout
 	if error:
 		return error
 	multiplayer.multiplayer_peer = peer
@@ -67,11 +68,11 @@ func join_server(address = ""):
 
 # If any peer (both server & client) connected. What should we do?
 func _on_peer_connected(id: int):
-	if not peers.has(id):
-		peers.append(id)
-	
 	# if we are server, then broadcast new peer to all existing peers
 	if multiplayer.is_server():
+		if not peers.has(id):
+			peers.append(id)
+		
 		broadcast_peers.rpc(peers)
 	
 	print("peer_connected")
@@ -80,11 +81,10 @@ func _on_peer_connected(id: int):
 
 # If any peer (both server & client) disconnected. What should we do?
 func _on_peer_disconnected(id: int):
-	if peers.has(id):
-		peers.erase(id)
-	
 	# if we are server, then remove this peer from all existing peers
 	if multiplayer.is_server():
+		if peers.has(id):
+			peers.erase(id)
 		broadcast_peers.rpc(peers)
 
 
@@ -117,14 +117,18 @@ func _on_server_disconnected():
 
 
 
+# Connected just for testing if peers are updated correctly
+func _on_peers_updated():
+	print(peers)
+
+
 ##
 ##
 ##
 
-
-
-# is_adding=true means add to peers, false means remove from peers
+# Update peers to all other connected client peers
 @rpc("call_local")
 func broadcast_peers(updated_peers: Array): # Array[int] causes bug in Godot
 	peers = updated_peers
 	peers_updated.emit()
+
