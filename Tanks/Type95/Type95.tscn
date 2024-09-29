@@ -1,34 +1,35 @@
-[gd_scene load_steps=9 format=3 uid="uid://k6g7e2p3vbur"]
+[gd_scene load_steps=9 format=3 uid="uid://bjsmd0jyvd6ih"]
 
-[ext_resource type="Script" path="res://Tanks/Tank.gd" id="1_hhu0u"]
-[ext_resource type="Texture2D" uid="uid://3pmj3qh07l67" path="res://assets/ww2_tanks_top_export/Tiger/ww2_top_view_hull3.png" id="2_gd201"]
-[ext_resource type="PackedScene" uid="uid://ojdp5ob5qkr3" path="res://Tanks/Bullet/Bullet.tscn" id="2_jwa78"]
-[ext_resource type="Texture2D" uid="uid://3ycayyopsflo" path="res://assets/ww2_tanks_top_export/Tiger/ww2_top_view_turret3.png" id="3_ntoav"]
-[ext_resource type="Texture2D" uid="uid://dblf3m6qdc3g2" path="res://assets/flags/1940-german-flag.jpg" id="3_ta65q"]
-[ext_resource type="AudioStream" uid="uid://cg2uh3rrvhe7t" path="res://assets/tank_sounds/canon_fire.ogg" id="4_8kyep"]
-[ext_resource type="AudioStream" uid="uid://bfyf6i7cvf3pm" path="res://assets/tank_sounds/engine_heavy_loop.ogg" id="5_sqshc"]
+[ext_resource type="Script" path="res://Tanks/Tank.gd" id="1_0psnl"]
+[ext_resource type="PackedScene" uid="uid://ojdp5ob5qkr3" path="res://Tanks/Bullet/Bullet.tscn" id="2_4bdov"]
+[ext_resource type="Texture2D" uid="uid://c4ge4ddrerye" path="res://assets/flags/japenese-flag.jpg" id="3_427he"]
+[ext_resource type="Texture2D" uid="uid://c56362am2xmr8" path="res://assets/ww2_tanks_top_export/type 95/ww2_top_view_hull14.png" id="4_vbo6d"]
+[ext_resource type="Texture2D" uid="uid://csje27l414edj" path="res://assets/ww2_tanks_top_export/type 95/ww2_top_view_turret14.png" id="5_hd5me"]
+[ext_resource type="AudioStream" uid="uid://cg2uh3rrvhe7t" path="res://assets/tank_sounds/canon_fire.ogg" id="6_m7s8r"]
+[ext_resource type="AudioStream" uid="uid://bfyf6i7cvf3pm" path="res://assets/tank_sounds/engine_heavy_loop.ogg" id="7_mked4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aoi2v"]
 size = Vector2(14, 23)
 
-[node name="Tiger" type="CharacterBody2D" node_paths=PackedStringArray("turret", "bullet_spawn_point")]
-script = ExtResource("1_hhu0u")
-tank_name = "Tiger"
-country = 1
+[node name="Type95" type="CharacterBody2D" node_paths=PackedStringArray("turret", "bullet_spawn_point")]
+script = ExtResource("1_0psnl")
+tank_name = "Type95"
+country = 4
 turret = NodePath("Body/Turret")
-bullet_scene = ExtResource("2_jwa78")
+bullet_scene = ExtResource("2_4bdov")
 bullet_spawn_point = NodePath("Body/Turret/BulletSpawnPoint")
-country_icon = ExtResource("3_ta65q")
+country_icon = ExtResource("3_427he")
 
 [node name="Body" type="Sprite2D" parent="."]
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("2_gd201")
+scale = Vector2(0.9, 0.9)
+texture = ExtResource("4_vbo6d")
 
 [node name="Turret" type="Sprite2D" parent="Body"]
-texture = ExtResource("3_ntoav")
+texture = ExtResource("5_hd5me")
 
 [node name="AimIndicator" type="Node2D" parent="Body/Turret"]
 z_index = 2
+scale = Vector2(0.7, 0.7)
 
 [node name="Line2D" type="Line2D" parent="Body/Turret/AimIndicator"]
 position = Vector2(0, -32)
@@ -55,19 +56,19 @@ default_color = Color(1, 1, 1, 0.85098)
 texture_mode = 1
 
 [node name="BulletSpawnPoint" type="Marker2D" parent="Body/Turret"]
-position = Vector2(0, -35)
+position = Vector2(0, -21)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 2.5)
+position = Vector2(0.365, -0.54)
 shape = SubResource("RectangleShape2D_aoi2v")
 
 [node name="FireSound" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("4_8kyep")
+stream = ExtResource("6_m7s8r")
 max_distance = 512.0
 attenuation = 2.0
 
 [node name="EngineSound" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("5_sqshc")
+stream = ExtResource("7_mked4")
 volume_db = -3.0
 autoplay = true
 max_distance = 512.0

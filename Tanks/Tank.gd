@@ -19,6 +19,8 @@ enum Country {
 @export var bullet_scene: PackedScene # Tank's bullet that should be spawned
 @export var bullet_spawn_point: Marker2D
 
+@export var country_icon: Texture2D # Cosmetic purpose
+
 var speed : float = 0
 
 

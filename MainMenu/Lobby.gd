@@ -5,8 +5,11 @@ extends Control
 @export var player_scene: PackedScene
 @export var tank_scenes: Array[PackedScene]
 
-@onready var player_list : ItemList = $Panel/CenterContainer/VBoxContainer/PlayerList
 
+@onready var player_name_edit: LineEdit = $PlayerNameEdit
+
+@onready var player_list : ItemList = $Panel/CenterContainer/VBoxContainer/PlayerList
+@onready var country_list : ItemList = $CountryList
 
 # All player scene instances synced with PeersManager.peers
 var this_player: HumanPlayer # Local player instance
@@ -18,7 +21,7 @@ func _ready():
 	this_player = human_player_scene.instantiate()
 	this_player.name = str(multiplayer.get_unique_id()) # Node name
 	this_player.player_peer_id = multiplayer.get_unique_id()
-	this_player.player_name = "Player Name"
+	this_player.player_name = "Unnamed Player"
 	this_player.tank = tank_scenes[0].instantiate() # TODO: add tank dependencies
 	
 	players.append(this_player)
@@ -34,6 +37,23 @@ func _ready():
 		this_player.player_name,
 		this_player.tank.scene_file_path
 	)
+	
+	
+	# Fill country list with tank scene names
+	country_list.clear()
+	for tank_scene in tank_scenes:
+		var tmp_tank = tank_scene.instantiate() as Tank
+		var country: String = str(tmp_tank.Country.keys()[tmp_tank.country])
+		var country_icon: Texture2D = tmp_tank.country_icon
+		country_list.add_item(
+			country,
+			country_icon
+		)
+		tmp_tank.free()
+		
+	
+	# Auto select first item
+	country_list.select(0)
 
 
 
@@ -43,7 +63,7 @@ func _process(delta):
 	player_list.clear()
 	# Add all the players
 	for player in players:
-		player_list.add_item(player.player_name + " (" + str(player.player_peer_id) + ")")
+		player_list.add_item(player.player_name + " (" + str(player.tank.Country.keys()[player.tank.country]) + ")")
 
 
 
@@ -107,7 +127,8 @@ func broadcast_player(
 		players.append(player)
 	else:
 		player.player_name = player_name
-		player.tank = tank_scenes[0].instantiate() # TODO: add tank dependencies
+		player.tank.free() # Free older tank
+		player.tank = load(tank_scene_path).instantiate() # TODO: add tank dependencies
 
 
 
@@ -118,3 +139,21 @@ func start_game():
 	level.this_player = this_player
 	level.players = players
 	SceneManager.switch_scene(level)
+
+
+func _on_player_name_edit_text_changed(new_text):
+	broadcast_player.rpc(
+		this_player.player_peer_id,
+		new_text,
+		this_player.tank.scene_file_path
+	)
+
+
+func _on_countries_list_item_selected(index):
+	var tank_scene_path = tank_scenes[index].resource_path
+	
+	broadcast_player.rpc(
+		this_player.player_peer_id,
+		this_player.player_name,
+		tank_scene_path # Broadcast new tank scene path
+	)

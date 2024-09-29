@@ -64,7 +64,7 @@ func _on_explode(at_global_position: Vector2):
 			player.tank.health -= 5
 			print("Player health reduced to: "+ str(player.tank.health))
 		
-		if player.health <= 0:
+		if player.tank.health <= 0:
 			player.death.emit()
 	print('exploded')
 

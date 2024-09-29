@@ -5,11 +5,16 @@ class_name Player
 @export var player_name: String
 @export var tank: Tank
 
-@export var kills: int
+@export var kills: int = 0
+@export var died_count: int = 0
 
 
 signal death
 var is_dead = false
+const MAX_DEATH_TIMER := 4.0
+var death_timer := MAX_DEATH_TIMER
+
+signal respawn(player: Player) # Whom to respawn (signal for Level node)
 
 
 func _ready():
@@ -21,7 +26,20 @@ func _ready():
 
 
 func _process(delta):
-	pass
+	if is_dead:
+		death_timer -= delta
+		tank.visible = false
+		if death_timer < 0:
+			is_dead = false
+			death_timer = MAX_DEATH_TIMER
+			tank.visible = true
+			tank.health = 100
+			respawn.emit(self)
+			if player_peer_id == multiplayer.get_unique_id():
+				get_tree().get_nodes_in_group("levels")[0].players_panel.visible = false
+
+
+
 
 func _physics_process(delta):
 	pass
@@ -31,9 +49,8 @@ func _physics_process(delta):
 func _on_death():
 	if not is_dead:
 		is_dead = true
-		# Set death anim timer
-		# Schedule re-spawn (reset of variables) after animation played
-		# For now, just reset variables and respawn:
-		# TODO NEEDS THINKING THO
+		died_count += 1
+		if player_peer_id == multiplayer.get_unique_id():
+			get_tree().get_nodes_in_group("levels")[0].players_panel.visible = true
 	else:
 		print("Error: Death signal called on already dead tank.")

@@ -17,7 +17,7 @@ func _on_create_server_pressed():
 
 
 func _on_create_client_pressed():
-	PeersManager.join_server()
+	PeersManager.join_server(ip_input.text)
 	get_tree().change_scene_to_packed(lobby_scene)
 
 

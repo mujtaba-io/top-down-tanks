@@ -1,0 +1,75 @@
+[gd_scene load_steps=9 format=3 uid="uid://lwoscq6mgnmt"]
+
+[ext_resource type="Script" path="res://Tanks/Tank.gd" id="1_lb8ny"]
+[ext_resource type="PackedScene" uid="uid://ojdp5ob5qkr3" path="res://Tanks/Bullet/Bullet.tscn" id="2_3ragj"]
+[ext_resource type="Texture2D" uid="uid://t10h7fqmf4gr" path="res://assets/flags/soviet-flag.jpg" id="3_bkgro"]
+[ext_resource type="Texture2D" uid="uid://bg5pipero7xqh" path="res://assets/ww2_tanks_top_export/T-34/ww2_top_view_hull4.png" id="4_jnkwc"]
+[ext_resource type="Texture2D" uid="uid://dobgr07yrv0hv" path="res://assets/ww2_tanks_top_export/T-34/ww2_top_view_turret4.png" id="5_nhum6"]
+[ext_resource type="AudioStream" uid="uid://cg2uh3rrvhe7t" path="res://assets/tank_sounds/canon_fire.ogg" id="6_36bc0"]
+[ext_resource type="AudioStream" uid="uid://bfyf6i7cvf3pm" path="res://assets/tank_sounds/engine_heavy_loop.ogg" id="7_syf15"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_msecx"]
+size = Vector2(14, 23)
+
+[node name="T34" type="CharacterBody2D" node_paths=PackedStringArray("turret", "bullet_spawn_point")]
+script = ExtResource("1_lb8ny")
+tank_name = "T34"
+country = 2
+turret = NodePath("Body/Turret")
+bullet_scene = ExtResource("2_3ragj")
+bullet_spawn_point = NodePath("Body/Turret/BulletSpawnPoint")
+country_icon = ExtResource("3_bkgro")
+
+[node name="Body" type="Sprite2D" parent="."]
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("4_jnkwc")
+
+[node name="Turret" type="Sprite2D" parent="Body"]
+texture = ExtResource("5_nhum6")
+
+[node name="AimIndicator" type="Node2D" parent="Body/Turret"]
+z_index = 2
+scale = Vector2(0.7, 0.7)
+
+[node name="Line2D" type="Line2D" parent="Body/Turret/AimIndicator"]
+position = Vector2(0, -32)
+scale = Vector2(2, 2)
+points = PackedVector2Array(0, -25, 0, -19)
+width = 1.0
+default_color = Color(1, 1, 1, 0.85098)
+texture_mode = 1
+
+[node name="Line2D2" type="Line2D" parent="Body/Turret/AimIndicator"]
+position = Vector2(0, -50.61)
+scale = Vector2(2, 2)
+points = PackedVector2Array(0, -24.545, 0, -19)
+width = 1.0
+default_color = Color(1, 1, 1, 0.85098)
+texture_mode = 1
+
+[node name="Line2D3" type="Line2D" parent="Body/Turret/AimIndicator"]
+position = Vector2(0, -67.97)
+scale = Vector2(2, 2)
+points = PackedVector2Array(0, -24.955, 0, -19)
+width = 1.0
+default_color = Color(1, 1, 1, 0.85098)
+texture_mode = 1
+
+[node name="BulletSpawnPoint" type="Marker2D" parent="Body/Turret"]
+position = Vector2(0, -30)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.53, 2.145)
+shape = SubResource("RectangleShape2D_msecx")
+
+[node name="FireSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_36bc0")
+max_distance = 512.0
+attenuation = 2.0
+
+[node name="EngineSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_syf15")
+volume_db = -3.0
+autoplay = true
+max_distance = 512.0
+attenuation = 2.0

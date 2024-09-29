@@ -3,6 +3,7 @@ class_name Level
 
 
 @export var human_player_scene: PackedScene
+@export var players_panel : Control
 
 
 var this_player: HumanPlayer
@@ -23,9 +24,14 @@ func _ready():
 	
 	# Randomize positions
 	for player in players:
+		player.respawn.connect(_on_player_respawn)
 		player.tank.position = Vector2(1, 1) * randf_range(0, 100)
 
 
 
 func _on_peers_manager_peers_updated():
 	pass # todo: update players as we did in lobby
+
+
+func _on_player_respawn(player: Player):
+	player.tank.position = Vector2(1, 1) * randf_range(0, 100)
